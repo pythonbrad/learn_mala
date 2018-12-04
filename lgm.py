@@ -6,7 +6,7 @@ first stable version 29/04/2018
 """
 import random
 import unicodedata
-from data.word import dict_word
+from data_lang.word import dict_word
 import glob
 import os
 
