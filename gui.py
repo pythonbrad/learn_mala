@@ -1,7 +1,8 @@
+# -*- coding: utf-8 -*-
 """
 LearnGhomala GUI by PythonBrad
 started 27/04/2018 at 19:41
-stable version 29/04/2018
+first stable version 29/04/2018
 """
 
 from tkinter import *
@@ -157,7 +158,7 @@ class GUI:
 
 		self.clean()
 		self.frame = Frame()
-		title = app.tilm("Cour","Maison","La cour","La maison")+" "+app.tilm("Apprendre","Étudier","Enseigner","Eduquer")+" "+app.dialect
+		title = app.tilm("Cour","Maison","La cour","La maison")+" "+app.tilm("Apprendre","Étudier","Enseigner","Eduquer","Parler")+" "+app.dialect
 		subtitle = "(L'école du %s)"%app.dialect
 		Button(self.frame, text="Changer de dialect", command=self.starter).pack(**self.pad)
 		Label(self.frame, text="Apprendre %s (%s mots)"%(app.dialect,app.word_nb)).pack(**self.pad)
@@ -179,40 +180,40 @@ class GUI:
 			).pack(side=TOP,**self.pad)
 		Button(
 			self.frame,
-			text='Niveaux 0',
+			text='Niveaux 0 (Initiation)',
 			command=lambda:self.set_level(0)
 			).pack(**self.pad)
 		Button(
 			self.frame,
-			text='Niveaux 1',
+			text='Niveaux 1 (Memorisation)',
 			command=lambda:self.set_level(1)
 			).pack(**self.pad)
 		Button(
 			self.frame,
-			text='Niveaux 2',
+			text='Niveaux 2 (Test Zero)',
 			command=lambda:self.set_level(2)
 			).pack(**self.pad)
 		Button(
 			self.frame,
-			text='Niveaux 3',
+			text='Niveaux 3 (Test One)',
 			command=lambda:self.set_level(3)
 			).pack(**self.pad)
 		Button(
 			self.frame,
-			text='Niveaux 4',
+			text='Niveaux 4 (Test Two)',
 			command=lambda:self.set_level(4)
 			).pack(**self.pad)
 		self.frame.pack(**self.pad)
 		if app.audio_word:
 			Button(
 				self.frame,
-				text='PREPA Niveaux 5',
+				text='PREPA Niveaux 5 (Prononciation)',
 				command=lambda:self.set_level('prepa 5')
 				).pack(**self.pad)
 			self.frame.pack(**self.pad)
 			Button(
 				self.frame,
-				text='Niveaux 5',
+				text='Niveaux 5 (Test Three)',
 				command=lambda:self.set_level(5)
 				).pack(**self.pad)
 			self.frame.pack(**self.pad)

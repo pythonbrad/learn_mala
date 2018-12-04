@@ -1,8 +1,8 @@
+# -*- coding: utf-8 -*-
 """
 LearnGhomala by PythonBrad
 started 27/04/2018 at 19:41
-stable version 29/04/2018
-Modified 6/25/2018
+first stable version 29/04/2018
 """
 import random
 import unicodedata
