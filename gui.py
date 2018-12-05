@@ -8,7 +8,6 @@ first stable version 29/04/2018
 from tkinter import *
 from tkinter.ttk import *
 from lgm import LGM
-from data import *
 from PIL import ImageTk
 import webbrowser
 try:
