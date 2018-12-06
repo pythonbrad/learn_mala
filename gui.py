@@ -39,6 +39,7 @@ class GUI:
 		self.image_home = ImageTk.PhotoImage(self.image_home)
 		self.data_image = {}
 		self.starter()
+		"""
 		Style(self.win).theme_create( "st_app", parent="alt", settings={
         ".":             {"configure": {"background"      : 'grey',
                                         "foreground"      : 'grey',
@@ -70,6 +71,7 @@ class GUI:
         "Horizontal.TProgressbar":{"configure": {"background": 'grey'}}
     })
 		Style(self.win).theme_use("st_app")
+		"""
 		self.win.mainloop()
 
 	def clean(self):
