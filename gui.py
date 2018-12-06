@@ -10,6 +10,9 @@ from tkinter.ttk import *
 from lgm import LGM
 from PIL import ImageTk
 import webbrowser
+import _thread
+import time
+
 try:
 	import psound
 except Exception as error:
@@ -36,6 +39,37 @@ class GUI:
 		self.image_home = ImageTk.PhotoImage(self.image_home)
 		self.data_image = {}
 		self.starter()
+		Style(self.win).theme_create( "st_app", parent="alt", settings={
+        ".":             {"configure": {"background"      : 'grey',
+                                        "foreground"      : 'grey',
+                                        "relief"          : "flat",
+                                        "highlightcolor"  : 'grey'}},
+
+        "TLabel":        {"configure": {"foreground"      : 'green',
+                                        "padding"         : 10,
+                                        "font"            : ("Calibri", 12)}},
+
+        "TNotebook":     {"configure": {"padding"         : 5}},
+        "TNotebook.Tab": {"configure": {"padding"         : [25, 5], 
+                                        "foreground"      : "white"},
+                            "map"      : {"background"      : [("selected", 'grey')],
+                                        "expand"          : [("selected", [1, 1, 1, 0])]}},
+
+        "TCombobox":     {"configure": {"selectbackground": 'grey',
+                                        "fieldbackground" : "white",
+                                        "background"      : 'grey',
+                                        "foreground"      : "black"}},
+
+        "TButton":       {"configure": {"font"            :("Calibri", 13, 'bold'),
+                                        "background"      : "black",
+                                        "foreground"      : 'green'},
+                            "map"      : {"background"      : [("active", 'green')],
+                                        "foreground"      : [("active", 'black')]}},
+            
+        "TEntry":        {"configure": {"foreground"      : "black"}},
+        "Horizontal.TProgressbar":{"configure": {"background": 'grey'}}
+    })
+		Style(self.win).theme_use("st_app")
 		self.win.mainloop()
 
 	def clean(self):
@@ -131,16 +165,17 @@ class GUI:
 			self.frame = Frame()
 			Label(self.frame, text="Tu veux apprendre quel langue?").pack(**self.pad)
 			frame1 = Frame(self.frame)
-			list_lang = Listbox(frame1)
+			list_lang = Combobox(frame1, state="readonly", values=app.get_list_lang())
+			list_lang.current(0)
 			list_lang.pack(side=LEFT)
 
-			for i in app.get_list_lang():
-				list_lang.insert('end', i)
-
-			list_lang.selection_set(0)
-			s=Scrollbar(frame1, command=list_lang.yview)
-			s.pack(side=RIGHT)
-			list_lang.config(yscrollcommand=s.set)
+			#for i in app.get_list_lang():
+			#	list_lang.insert('end', i)
+			#
+			#list_lang.selection_set(0)
+			#s=Scrollbar(frame1, command=list_lang.yview)
+			#s.pack(side=RIGHT)
+			#list_lang.config(yscrollcommand=s.set)
 			frame1.pack(**self.pad)
 			Button(
 				self.frame, text="Validez",
