@@ -307,7 +307,6 @@ class GUI:
 				app.list_audio[id],
 				app.dialect)
 			).pack(**self.pad)
-			print(self.data_image.keys())
 			Label(self.frame, image=self.image_audio).pack(**self.pad)
 			Button(self.frame, text='Repeat', command=lambda:self.play(app.whole_sound(0))).pack(**self.pad)
 			Button(self.frame, text='Next', command=lambda:self.play(app.whole_sound(1))).pack(**self.pad)
