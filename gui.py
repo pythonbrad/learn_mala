@@ -10,8 +10,7 @@ from tkinter.ttk import *
 from lgm import LGM
 from PIL import ImageTk
 import webbrowser
-import _thread
-import time
+import random
 
 try:
 	import psound
@@ -28,6 +27,8 @@ class GUI:
 		self.win = Tk()
 		self.win.iconphoto(self.win, PhotoImage(file="ico.gif"))
 		self.win.title('Learn Ghomala')
+		self.win.minsize(300,600)
+		#self.win.resizable(0,0)
 		menu = Menu()
 		menu.add_cascade(label='About', command=self.about)
 		self.win.config(menu=menu)
@@ -39,6 +40,9 @@ class GUI:
 		self.image_home = ImageTk.PhotoImage(self.image_home)
 		self.data_image = {}
 		self.starter()
+		self.style = Style(self.win)
+		self.style.configure("TButton", font=('Arial', 15))
+		self.style.configure("TLabel", font=('Arial', 15))
 		self.win.mainloop()
 
 	def clean(self):
@@ -280,6 +284,14 @@ class GUI:
 					Label(self.frame, text="Indice: "+app.word_pendu(app.word_correct)).pack(**self.pad)
 				self.entry = Entry(self.frame)
 				self.entry.pack(**self.pad)
+				if len(app.word_correct.split()) > 2:
+					words = [word for word in app.word_correct.split()] + [random.choice(app.word_no_translated),random.choice(app.word_no_translated),' ']
+				else:
+					words = [i for i in app.word_correct]
+				words = app.shuffle(words, no_double=True)
+				for word in words:
+					Button(self.frame,text=word, command=lambda word=word:self.entry.insert(END,word)).pack()
+				Button(self.frame,text='DELETE', command=lambda word=word:self.entry.delete(0,END)).pack()
 				self.button = Button(
 					self.frame,
 				 	text="Validez", command=self.choose

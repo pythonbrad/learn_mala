@@ -41,6 +41,15 @@ class LGM:
 
 		return word
 
+	def shuffle(self, data, no_double=False):
+		data_shuffled = []
+		while data:
+			_ = random.choice(data)
+			data.remove(_)
+			if not no_double or (no_double and not _ in data_shuffled):
+				data_shuffled.append(_)
+		return data_shuffled
+
 	def get_list_lang(self):
 		"""Module qui renvoie la liste des dialects"""
 
