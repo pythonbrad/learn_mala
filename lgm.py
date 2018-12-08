@@ -19,12 +19,14 @@ class LGM:
 		self.word_translated = []
 		self.dialect = None
 		self.score = 0
+		self.word_nb = 0
 		self.word_choosed = None
 		self.word_correct = None
 		self.word_no_correct = None
 		self.id_word = 0
 		self.level = 0
 		self.audio_word = False
+		self.audio_word_nb = 0
 		self.list_audio = None
 		self.audio_to_play = None
 		self.sound_dir = None
@@ -71,6 +73,7 @@ class LGM:
 			_ = os.getcwd()
 			os.chdir(self.sound_dir+'/'+self.dialect)
 			self.list_audio = [i.split('.')[0].capitalize() for i in glob.glob('*.wav')]
+			self.audio_word_nb = len(self.list_audio)
 			os.chdir(_)
 			self.audio_word = True
 		except Exception as error:

@@ -35,9 +35,18 @@ class GUI:
 		self.pad = {"padx":15, "pady":15}
 		self._temp = []
 		self.size_img = (600, 300)
+		#image_starter
+		self.image_starter = ImageTk.Image.open('img/'+'éduquer'+'.png')
+		self.image_starter = self.image_starter.resize(self.size_img)
+		self.image_starter = ImageTk.PhotoImage(self.image_starter)
+		#image_home
 		self.image_home = ImageTk.Image.open('img/'+'aller'+'.png')
 		self.image_home = self.image_home.resize(self.size_img)
 		self.image_home = ImageTk.PhotoImage(self.image_home)
+		#image_audio
+		self.image_audio = ImageTk.Image.open('img/'+'écouter'+'.png')
+		self.image_audio = self.image_audio.resize(self.size_img)
+		self.image_audio = ImageTk.PhotoImage(self.image_audio)
 		self.data_image = {}
 		self.starter()
 		self.style = Style(self.win)
@@ -137,17 +146,10 @@ class GUI:
 		if not dialect:
 			self.frame = Frame()
 			Label(self.frame, text="Tu veux apprendre quel langue?").pack(**self.pad)
+			Label(self.frame, image=self.image_starter).pack(**self.pad)
 			frame1 = Frame(self.frame)
 			list_lang = Combobox(frame1, state="readonly", values=app.get_list_lang())
 			list_lang.pack(side=LEFT)
-
-			#for i in app.get_list_lang():
-			#	list_lang.insert('end', i)
-			#
-			#list_lang.selection_set(0)
-			#s=Scrollbar(frame1, command=list_lang.yview)
-			#s.pack(side=RIGHT)
-			#list_lang.config(yscrollcommand=s.set)
 			frame1.pack(**self.pad)
 			Button(
 				self.frame, text="Validez",
@@ -164,10 +166,10 @@ class GUI:
 
 		self.clean()
 		self.frame = Frame()
-		title = app.tilm("Cour","Maison","La cour","La maison")+" "+app.tilm("Apprendre","Étudier","Enseigner","Eduquer","Parler")+" "+app.dialect
+		title = app.tilm("Cour","Maison","La cour","La maison")+" "+app.tilm("Apprendre","Étudier","Enseigner","Eduquer","Parler","écouter")+" "+app.dialect
 		subtitle = "(L'école du %s)"%app.dialect
 		Button(self.frame, text="Changer de dialect", command=self.starter).pack(**self.pad)
-		Label(self.frame, text="Apprendre %s (%s mots)"%(app.dialect,app.word_nb)).pack(**self.pad)
+		Label(self.frame, text="Apprendre %s (%s mots et %s audios)"%(app.dialect,app.word_nb,app.audio_word_nb)).pack(**self.pad)
 		Label(self.frame, text=title).pack(**self.pad)
 		Label(self.frame, image=self.image_home).pack(**self.pad)
 		Label(self.frame, text=subtitle).pack(**self.pad)
@@ -257,6 +259,7 @@ class GUI:
 					image=self.data_image[app.word_correct] if app.level == 1 else None
 					).pack(**self.pad)
 				if app.level == 5:
+					Label(self.frame, image=self.image_audio).pack(**self.pad)
 					Button(self.frame,
 						text="Repeat",
 						command=lambda:self.play_audio_word(app.word_correct)
@@ -304,6 +307,8 @@ class GUI:
 				app.list_audio[id],
 				app.dialect)
 			).pack(**self.pad)
+			print(self.data_image.keys())
+			Label(self.frame, image=self.image_audio).pack(**self.pad)
 			Button(self.frame, text='Repeat', command=lambda:self.play(app.whole_sound(0))).pack(**self.pad)
 			Button(self.frame, text='Next', command=lambda:self.play(app.whole_sound(1))).pack(**self.pad)
 			Button(self.frame, text='Before', command=lambda:self.play(app.whole_sound(-1))).pack(**self.pad)
