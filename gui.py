@@ -212,7 +212,7 @@ class GUI:
 			command=lambda:self.set_level(4)
 			).pack(**self.pad)
 		self.frame.pack(**self.pad)
-		if app.audio_word:
+		if app.audio_word and app.audio_word_nb > 0:
 			Button(
 				self.frame,
 				text='PREPA Niveaux 5 (Prononciation)',
@@ -304,9 +304,10 @@ class GUI:
 			id = app.whole_sound(0)
 			self.play_audio_word(app.audio_to_play)
 			Label(self.frame, text="<%s> en %s"%(
-				app.list_audio[id],
+				app.list_audio[id].replace('+', '?').replace('_', ''),
 				app.dialect)
 			).pack(**self.pad)
+			Label(self.frame, text=app.tilm(app.audio_to_play.replace('+', '?').replace('_', ''))).pack(**self.pad)
 			Label(self.frame, image=self.image_audio).pack(**self.pad)
 			Button(self.frame, text='Repeat', command=lambda:self.play(app.whole_sound(0))).pack(**self.pad)
 			Button(self.frame, text='Next', command=lambda:self.play(app.whole_sound(1))).pack(**self.pad)
