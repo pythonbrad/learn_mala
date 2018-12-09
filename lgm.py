@@ -148,13 +148,16 @@ class LGM:
 			self.incr_score(-1)
 			return "Vous avez rater!, C'est %s"%self.word_correct
 
-	def ask(self, list_word=None):
+	def ask(self):
 		"""Module qui renvoie une question"""
 
-		self.random_word(list_word)
-		return "Que signifie %s en %s ?"%(self.tilm(self.word_correct), self.dialect) if self.level != 5 else "Ca signifie quoi?"
+		self.random_word(None)
+		return "Que signifie %s en %s ?"%(self.tilm(self.word_correct), self.dialect)
 
 	def get_position(self):
 		"""Module qui renvoie une position"""
 
 		return random.choice(["left", "right"])
+
+	def replace(self, word, c=1):
+		return word.replace('+', '?').replace('_', '') if c else word

@@ -127,7 +127,7 @@ class GUI:
 	def choose(self, word=None):
 		"""Module qui gere le choix de l'utilisateur"""
 
-		if app.level in [1,2,5]:
+		if app.level in [1,2,5,6]:
 			self.button1.config(state='disable')
 			self.button2.config(state='disable')
 			app.word_choosed = word
@@ -135,7 +135,7 @@ class GUI:
 		elif app.level in [3,4]:
 			self.entry.config(state='disable')
 			self.button.config(state='disable')
-			app.word_choosed = self.entry.get()
+			app.word_choosed = self.entry.get().strip()
 			self.label_title.config(text=app.verify())
 		self.win.after(1000, self.play)
 
@@ -225,6 +225,12 @@ class GUI:
 				command=lambda:self.set_level(5)
 				).pack(**self.pad)
 			self.frame.pack(**self.pad)
+			Button(
+				self.frame,
+				text='Niveaux 6 (Test Four)',
+				command=lambda:self.set_level(6)
+				).pack(**self.pad)
+			self.frame.pack(**self.pad)
 
 	def play(self, temp=None):
 		"""Module qui gere le menu de jeux"""
@@ -243,30 +249,37 @@ class GUI:
 			).pack(**self.pad)
 			Button(self.frame, text='Next', command=lambda:self.play(app.whole(1))).pack(**self.pad)
 			Button(self.frame, text='Before', command=lambda:self.play(app.whole(-1))).pack(**self.pad)
-		elif app.level in [1,2,3,4,5]:
+		elif app.level in [1,2,3,4,5,6]:
 			self.score = Label(self.frame, text="Score: %s"%app.score)
 			self.score.pack(**self.pad)
+			if app.level in [5,6]:
+				app.random_word(app.list_audio)
 			self.label_title = Label(
 				self.frame,
-				text=app.ask(app.list_audio if app.level == 5 else None)
+				text=app.ask() if not app.level in [5,6] else "Ca signifie quoi?"
 				)
 			self.label_title.pack(side=TOP, **self.pad)
 
-			if app.level in [1,2,5]:
+			if app.level in [1,2,5,6]:
 				pos = app.get_position()
 				Label(
 					self.frame,
 					image=self.data_image[app.word_correct] if app.level == 1 else None
 					).pack(**self.pad)
-				if app.level == 5:
+				if app.level in [5,6]:
 					Label(self.frame, image=self.image_audio).pack(**self.pad)
 					Button(self.frame,
 						text="Repeat",
 						command=lambda:self.play_audio_word(app.word_correct)
 						).pack()
+				word_correct = app.replace(app.word_correct, app.level in [5,6])
+				word_no_correct = app.replace(app.word_no_correct, app.level in [5,6])
+				if app.level == 5:
+					word_correct = app.tilm(word_correct)
+					word_no_correct = app.tilm(word_no_correct)
 				self.button1 = Button(
 					self.frame,
-					text=app.word_correct,
+					text=word_correct,
 					command=lambda:self.choose(app.word_correct)
 					)
 				self.button1.pack(
@@ -275,7 +288,7 @@ class GUI:
 					)
 				self.button2 = Button(
 					self.frame,
-					text=app.word_no_correct,
+					text=word_no_correct,
 					command=lambda:self.choose(app.word_no_correct)
 					)
 				self.button2.pack(
@@ -288,12 +301,20 @@ class GUI:
 				self.entry = Entry(self.frame)
 				self.entry.pack(**self.pad)
 				if len(app.word_correct.split()) > 2:
-					words = [word for word in app.word_correct.split()] + [random.choice(app.word_no_translated),random.choice(app.word_no_translated),' ']
+					words = [word+' ' for word in app.word_correct.split()] + [random.choice(app.word_no_translated),random.choice(app.word_no_translated),' ']
 				else:
 					words = [i for i in app.word_correct]
+					_ = [i for i in 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ']
+					words += [random.choice(_),random.choice(_)]
 				words = app.shuffle(words, no_double=True)
+				i = 0
 				for word in words:
-					Button(self.frame,text=word, command=lambda word=word:self.entry.insert(END,word)).pack()
+					m = i%3
+					if not m:
+						f = Frame(self.frame)
+						f.pack()
+					Button(f,text=word, command=lambda word=word:self.entry.insert(END,word)).pack(side=LEFT if not m else RIGHT)
+					i += 1
 				Button(self.frame,text='DELETE', command=lambda word=word:self.entry.delete(0,END)).pack()
 				self.button = Button(
 					self.frame,
@@ -304,10 +325,10 @@ class GUI:
 			id = app.whole_sound(0)
 			self.play_audio_word(app.audio_to_play)
 			Label(self.frame, text="<%s> en %s"%(
-				app.list_audio[id].replace('+', '?').replace('_', ''),
+				app.replace(app.list_audio[id]),
 				app.dialect)
 			).pack(**self.pad)
-			Label(self.frame, text=app.tilm(app.audio_to_play.replace('+', '?').replace('_', ''))).pack(**self.pad)
+			Label(self.frame, text=app.tilm(app.replace(app.audio_to_play))).pack(**self.pad)
 			Label(self.frame, image=self.image_audio).pack(**self.pad)
 			Button(self.frame, text='Repeat', command=lambda:self.play(app.whole_sound(0))).pack(**self.pad)
 			Button(self.frame, text='Next', command=lambda:self.play(app.whole_sound(1))).pack(**self.pad)
