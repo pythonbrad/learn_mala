@@ -36,23 +36,24 @@ class GUI:
 		self._temp = []
 		self.size_img = (600, 300)
 		#image_starter
-		self.image_starter = ImageTk.Image.open('img/'+'éduquer'+'.png')
-		self.image_starter = self.image_starter.resize(self.size_img)
-		self.image_starter = ImageTk.PhotoImage(self.image_starter)
+		self.image_starter = 'éduquer'
 		#image_home
-		self.image_home = ImageTk.Image.open('img/'+'aller'+'.png')
-		self.image_home = self.image_home.resize(self.size_img)
-		self.image_home = ImageTk.PhotoImage(self.image_home)
+		self.image_home = 'aller'
 		#image_audio
-		self.image_audio = ImageTk.Image.open('img/'+'écouter'+'.png')
-		self.image_audio = self.image_audio.resize(self.size_img)
-		self.image_audio = ImageTk.PhotoImage(self.image_audio)
-		self.data_image = {}
+		self.image_audio = 'écouter'
 		self.starter()
 		self.style = Style(self.win)
 		self.style.configure("TButton", font=('Arial', 15))
 		self.style.configure("TLabel", font=('Arial', 15))
 		self.win.mainloop()
+
+	def set_img(self, img_name):
+		try:
+			self.img = ImageTk.PhotoImage(ImageTk.Image.open('img/'+img_name+'.png').resize(self.size_img))
+		except Exception as error:
+			print(error)
+			self.img = ImageTk.PhotoImage(ImageTk.Image.open('img/'+'devine'+'.png').resize(self.size_img))
+		return self.img
 
 	def clean(self):
 		"""Module permettant de nettoyer la fenetre"""
@@ -86,38 +87,6 @@ class GUI:
 		frame2.pack()
 		Label(fen, text=app.source.upper()).pack(**self.pad)
 
-	def load_image(self):
-		"""Module permettant de charger les images en memoire"""
-
-		self.win.config(cursor='wait')
-		self.frame = Frame()
-		label = Label(self.frame, text="Loading images")
-		label.pack(**self.pad)
-		pb_var = StringVar(self.frame)
-		pb_var.set(0)
-		pb = Progressbar(self.frame, variable=pb_var, max=len(app.word_no_translated))
-		pb.pack(**self.pad)
-		self.frame.pack()
-		devine = ImageTk.Image.open('img/'+'devine'+'.png')
-		devine = devine.resize(self.size_img)
-		devine = ImageTk.PhotoImage(devine)
-
-		for i in app.word_no_translated:
-			pb_var.set(int(pb_var.get())+1)
-			label.config(text="Loading %s.png ..."%app.word_no_translated[i])
-
-			if not i in self.data_image:
-
-				try:
-					img = ImageTk.Image.open('img/'+app.word_no_translated[i].lower()+'.png')
-					img = img.resize(self.size_img)
-					img = ImageTk.PhotoImage(img)
-				except:
-					img = devine
-				self.data_image[app.word_no_translated[i]] = img
-				pb.update()
-		self.win.config(cursor='')
-
 	def set_level(self, x):
 		"""Module permettant de choisir un niveau"""
 
@@ -146,7 +115,7 @@ class GUI:
 		if not dialect:
 			self.frame = Frame()
 			Label(self.frame, text="Tu veux apprendre quel langue?").pack(**self.pad)
-			Label(self.frame, image=self.image_starter).pack(**self.pad)
+			Label(self.frame, image=self.set_img(self.image_starter)).pack(**self.pad)
 			frame1 = Frame(self.frame)
 			list_lang = Combobox(frame1, state="readonly", values=app.get_list_lang())
 			list_lang.pack(side=LEFT)
@@ -158,7 +127,6 @@ class GUI:
 			self.frame.pack(**self.pad)
 		else:
 			app.setting(dialect)
-			self.load_image()
 			self.main_menu()
 
 	def main_menu(self):
@@ -171,7 +139,7 @@ class GUI:
 		Button(self.frame, text="Changer de dialect", command=self.starter).pack(**self.pad)
 		Label(self.frame, text="Apprendre %s (%s mots et %s audios)"%(app.dialect,app.word_nb,app.audio_word_nb)).pack(**self.pad)
 		Label(self.frame, text=title).pack(**self.pad)
-		Label(self.frame, image=self.image_home).pack(**self.pad)
+		Label(self.frame, image=self.set_img(self.image_home)).pack(**self.pad)
 		Label(self.frame, text=subtitle).pack(**self.pad)
 		Button(self.frame, text="Commencer", command=self.choose_level).pack(**self.pad)
 		self.frame.pack(**self.pad)
@@ -264,10 +232,10 @@ class GUI:
 				pos = app.get_position()
 				Label(
 					self.frame,
-					image=self.data_image[app.word_correct] if app.level == 1 else None
+					image=self.set_img(app.word_correct) if app.level == 1 else None
 					).pack(**self.pad)
 				if app.level in [5,6]:
-					Label(self.frame, image=self.image_audio).pack(**self.pad)
+					Label(self.frame, image=self.set_img(self.image_audio)).pack(**self.pad)
 					Button(self.frame,
 						text="Repeat",
 						command=lambda:self.play_audio_word(app.word_correct)
@@ -329,7 +297,7 @@ class GUI:
 				app.dialect)
 			).pack(**self.pad)
 			Label(self.frame, text=app.tilm(app.replace(app.audio_to_play))).pack(**self.pad)
-			Label(self.frame, image=self.image_audio).pack(**self.pad)
+			Label(self.frame, image=self.set_img(self.image_audio)).pack(**self.pad)
 			Button(self.frame, text='Repeat', command=lambda:self.play(app.whole_sound(0))).pack(**self.pad)
 			Button(self.frame, text='Next', command=lambda:self.play(app.whole_sound(1))).pack(**self.pad)
 			Button(self.frame, text='Before', command=lambda:self.play(app.whole_sound(-1))).pack(**self.pad)
