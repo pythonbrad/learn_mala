@@ -18,7 +18,6 @@ except Exception as error:
 	print('FATAL ERROR:',error)
 
 app = LGM()
-app.sound_dir = 'sound'
 
 class GUI:
 	"""Interface Graphic"""
@@ -49,10 +48,10 @@ class GUI:
 
 	def set_img(self, img_name):
 		try:
-			self.img = ImageTk.PhotoImage(ImageTk.Image.open('img/'+img_name+'.png').resize(self.size_img))
+			self.img = ImageTk.PhotoImage(ImageTk.Image.open(app.img_dir+'/'+img_name+'.png').resize(self.size_img))
 		except Exception as error:
 			print(error)
-			self.img = ImageTk.PhotoImage(ImageTk.Image.open('img/'+'devine'+'.png').resize(self.size_img))
+			self.img = ImageTk.PhotoImage(ImageTk.Image.open(app.img_dir+'/'+'devine'+'.png').resize(self.size_img))
 		return self.img
 
 	def clean(self):
@@ -306,6 +305,6 @@ class GUI:
 
 	def play_audio_word(self, word):
 		""""""
-		psound.play(word, app.dialect)
+		psound.play("%s/%s/%s"%(app.sound_dir,app.dialect,word))
 
 GUI()

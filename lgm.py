@@ -29,7 +29,8 @@ class LGM:
 		self.audio_word_nb = 0
 		self.list_audio = None
 		self.audio_to_play = None
-		self.sound_dir = None
+		self.sound_dir = 'data/sound'
+		self.img_dir = 'data/img'
 
 	def word_pendu(self, word):
 		"""Module qui transforme un mot en mot de pendu"""
@@ -146,7 +147,7 @@ class LGM:
 			return "Vous avez trouver!"
 		else:
 			self.incr_score(-1)
-			return "Vous avez rater!, C'est %s"%self.word_correct
+			return "Vous avez rater!, C'est %s"%self.replace(self.word_correct)
 
 	def ask(self):
 		"""Module qui renvoie une question"""

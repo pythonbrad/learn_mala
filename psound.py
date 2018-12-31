@@ -4,19 +4,19 @@ import _thread
 
 _playing = False
 
-def play(filename, rep):
+def play(filename):
 	stop()
 	global _playing
 	_playing = True
-	_thread.start_new(_player, (filename,rep,))
+	_thread.start_new(_player, (filename,))
 
-def _player(filename, rep):
+def _player(filename):
 	global _playing
 	global soundir
 	try:
 		chunk = 1024
 		p = pyaudio.PyAudio()
-		wf = wave.open('sound/'+rep+'/'+filename+".wav", 'rb')
+		wf = wave.open(filename+".wav", 'rb')
 		stream = p.open(
 			format = p.get_format_from_width(wf.getsampwidth()),
 			channels = wf.getnchannels(),
@@ -31,7 +31,7 @@ def _player(filename, rep):
 		stream.close()
 		p.terminate()
 	except Exception as error:
-		print("Sound '%s.wav' error: %s"%(filename.lower(),error))
+		print("Sound' error: %s"%(filename.lower(),error))
 	_playing = False
 
 def stop():
