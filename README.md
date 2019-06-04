@@ -9,5 +9,6 @@ How install
 ```
 pip install Pillow
 pip install pyaudio
-git clone --recursive https://github.com/pythonbrad/learn_mala.git
+git clone https://github.com/pythonbrad/learn_mala.git
+git clone https://github.com/pythonbrad/data_lang.git
 ```
